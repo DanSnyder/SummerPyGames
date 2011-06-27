@@ -83,11 +83,7 @@ class CPU(pygame.sprite.Sprite):
 
 class ball(pygame.sprite.Sprite):
 
-        def __init__(self, x, y, speedx, speedy):
-                if speedy > speedx:
-                    speedxn = speedy
-                    speedy = speedx
-                    speedx = speedxn
+        def __init__(self, x, y, (speedx, speedy)):
                 self.dir_x = speedx
                 self.dir_y = speedy
                 pygame.sprite.Sprite.__init__(self)
@@ -136,10 +132,11 @@ class ball(pygame.sprite.Sprite):
                         self.dir_y = 10
 
 def num():
-    number = random.randrange(-6, 6)
-    if number == 0:
-        number = 2
-    return number
+    i = random.randrange(0, 15)
+    speeds = [(5, 5), (-5, 5), (5, -5), (-5, -5), (3, 4),
+              (4, 5), (-4, 3), (-2, -5), (-2, -4), (4, 1),
+              (5, 2), (-4, 1), (-3, -2), (3, 5), (-3, 1)]
+    return speeds[i]
     
 if 'Windows' in platform.platform():
         os.environ['SDL_VIDEODRIVER'] = 'windib'
@@ -164,7 +161,7 @@ player = Player(100)
 player2 = CPU(100)
 paddles = pygame.sprite.RenderPlain(player)
 paddles.add(player2)
-ball = ball(screen.get_rect().centerx, screen.get_rect().centery, num(), num())
+ball = ball(screen.get_rect().centerx, screen.get_rect().centery, num())
 ball2 = pygame.sprite.RenderPlain(ball)
 on = True
 
@@ -185,7 +182,7 @@ while on:
                         if event.key == K_DOWN:
                                 player.change(-6)
                                 
-        player2.change(4)
+        player2.change(5)
         paddles.update()
         ball.update(paddles, wall_list)
         screen.fill((0, 0, 0))
